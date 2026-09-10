@@ -1,0 +1,6 @@
+tags:
+  integration:
+    timeout: 2x
+  soak:
+    timeout: none
+    skip: "Soak test. Run explicitly: dart test --run-skipped -t soak"
