@@ -238,10 +238,14 @@ class TypedSocket {
       listener.close();
       return;
     }
+    // The source controller is already asynchronous, so forward
+    // synchronously: states then arrive in the same microtask order as every
+    // other stream of this socket. addSync never overtakes the replayed
+    // value above, because it waits for pending events.
     final sub = _stateController.stream.listen(
-      listener.add,
-      onError: listener.addError,
-      onDone: listener.close,
+      listener.addSync,
+      onError: listener.addErrorSync,
+      onDone: listener.closeSync,
     );
     listener
       ..onPause = sub.pause
