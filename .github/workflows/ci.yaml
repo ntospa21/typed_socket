@@ -53,10 +53,15 @@ jobs:
       - run: flutter test
 
   publish_dry_run:
-    name: Publish dry run
+    name: Publish dry run and pana
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
       - uses: dart-lang/setup-dart@v1
       - run: dart pub get
       - run: dart pub publish --dry-run
+      # pana's sandbox does not support Windows paths, so the score is
+      # checked here. Informational for now; once the baseline is known,
+      # add --exit-code-threshold to fail on lost points.
+      - run: dart pub global activate pana
+      - run: dart pub global run pana --no-warning .
