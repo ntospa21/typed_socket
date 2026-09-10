@@ -1,5 +1,7 @@
 # typed_socket
 
+[![CI](https://github.com/ntospa21/typed_socket/actions/workflows/ci.yaml/badge.svg)](https://github.com/ntospa21/typed_socket/actions/workflows/ci.yaml)
+
 A typed, resilient WebSocket client for Dart and Flutter that turns plain
 JSON-over-WebSocket into typed streams that survive reconnects.
 
@@ -57,14 +59,14 @@ socket.sendTyped('message', msg); // buffered and flushed in order when offline
 
 ## How it compares
 
-|                                 | typed_socket                  | web_socket_channel  | socket_io_client        | phoenix_socket          |
-| ------------------------------- | ----------------------------- | ------------------- | ----------------------- | ----------------------- |
-| Server                          | Any plain JSON WebSocket      | Any WebSocket       | Socket.IO servers only  | Phoenix Channels only   |
-| Automatic reconnect             | Yes, full-jitter backoff      | No, write your own  | Yes                     | Yes                     |
-| Dead-connection detection       | App-level heartbeat, all platforms | No           | Engine.IO ping          | Phoenix heartbeat       |
-| Typed messages                  | Yes, checked at wiring time   | No, raw frames      | No, dynamic payloads    | No, map payloads        |
-| Sends while offline             | Explicit policy, 4 choices    | Not handled         | Buffered                | Buffered                |
-| Test fake shipped               | `FakeTransport`               | No                  | No                      | No                      |
+| | typed_socket | web_socket_channel | socket_io_client | phoenix_socket |
+| --- | --- | --- | --- | --- |
+| Server | Any plain JSON WebSocket | Any WebSocket | Socket.IO servers only | Phoenix Channels only |
+| Automatic reconnect | Yes, full-jitter backoff | No, write your own | Yes | Yes |
+| Dead-connection detection | App-level heartbeat, all platforms | No | Engine.IO ping | Phoenix heartbeat |
+| Typed messages | Yes, checked at wiring time | No, raw frames | No, dynamic payloads | No, map payloads |
+| Sends while offline | Explicit policy, 4 choices | Not handled | Buffered | Buffered |
+| Test fake shipped | `FakeTransport` | No | No | No |
 
 Pick `socket_io_client` or `phoenix_socket` if your server speaks those
 protocols. Pick `typed_socket` when your backend speaks plain JSON over
@@ -112,12 +114,12 @@ idle ──connect()──▶ connecting ──▶ connected
 
 `send` and `sendTyped` return synchronously with a `SendOutcome`:
 
-| Policy                       | While not connected                                          |
-| ---------------------------- | ------------------------------------------------------------ |
+| Policy | While not connected |
+| --- | --- |
 | `bufferDropOldest` (default) | Buffer. When full, evict the oldest frame. Returns `buffered`. |
-| `bufferDropNew`              | Buffer. When full, discard the new frame. Returns `dropped`.   |
-| `drop`                       | Discard. Returns `dropped`. Good for presence and telemetry.   |
-| `reject`                     | Throw `TypedSocketOfflineException`. You manage your own queue. |
+| `bufferDropNew` | Buffer. When full, discard the new frame. Returns `dropped`. |
+| `drop` | Discard. Returns `dropped`. Good for presence and telemetry. |
+| `reject` | Throw `TypedSocketOfflineException`. You manage your own queue. |
 
 ```dart
 final socket = TypedSocket(
